@@ -49,6 +49,13 @@ export async function GET(request: Request) {
             { status: 200 }
         );
     } catch (error) {
-
+        console.log("Error in fetching messages:", error);
+        return Response.json(
+            {
+                success: false,
+                message: "Error in fetching messages"
+            },
+            { status: 500 }
+        );
     }
 }
