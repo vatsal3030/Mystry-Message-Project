@@ -2,7 +2,7 @@
 import React from "react";
 import { resend } from "@/lib/resend";
 import VerificationEmail from "../../emails/VerificationEmail";
-import { ApiResponse } from "../../types/ApiResponse";
+import { ApiResponse } from "../types/ApiResponse";
 import { render } from "@react-email/render";
 
 export async function sendVerificationEmail(
