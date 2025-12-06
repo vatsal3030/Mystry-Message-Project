@@ -38,7 +38,7 @@
 //    toast('response.data.message')
 //    onMessageDelete(message._id as string)
 // }
-   
+
 
 //     return (
 //         <Card>
@@ -82,22 +82,22 @@
 
 import React from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
@@ -107,81 +107,95 @@ import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 
 type MessageCardProps = {
-  message: Message;
-  onMessageDelete: (messageId: string) => void;
+    message: Message;
+    onMessageDelete: (messageId: string) => void;
 };
 
 function MessageCard({ message, onMessageDelete }: MessageCardProps) {
-  const handleDeleteConfirm = async () => {
-    try {
-      const response = await axios.delete<ApiResponse>(
-        `/api/delete-message/${message._id}`
-      );
+    const handleDeleteConfirm = async () => {
+        try {
+            const response = await axios.delete<ApiResponse>(
+                `/api/delete-message/${message._id}`
+            );
 
-      toast("Message deleted", {
-        description: response.data.message ?? "The message has been removed.",
-      });
+            toast("Message deleted", {
+                description: response.data.message ?? "The message has been removed.",
+            });
 
-      onMessageDelete(message._id as string);
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      toast("Error", {
-        description:
-          axiosError.response?.data.message ||
-          "Failed to delete message. Please try again.",
-      });
-    }
-  };
+            onMessageDelete(message._id as string);
+        } catch (error) {
+            const axiosError = error as AxiosError<ApiResponse>;
+            toast("Error", {
+                description:
+                    axiosError.response?.data.message ||
+                    "Failed to delete message. Please try again.",
+            });
+        }
+    };
 
-  const formattedDate = new Date(message.createdAt).toLocaleString();
+    //   const formattedDate = new Date(message.createdAt).toLocaleString();
+    const formattedDate = new Date(message.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",  // "Dec"
+        day: "numeric"   // "6"
+    });
 
-  return (
-    <Card className="shadow-sm">
-      <CardHeader className="flex flex-row items-start justify-between space-y-0">
-        <div>
-          <CardTitle className="text-base font-semibold">
-            Anonymous Message
-          </CardTitle>
-          <CardDescription className="text-xs text-muted-foreground">
-            {formattedDate}
-          </CardDescription>
-        </div>
+    const formattedTime = new Date(message.createdAt).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              size="icon"
-              className="h-8 w-8 rounded-full"
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete this message?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. The message will be permanently
-                removed from your inbox.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteConfirm}>
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </CardHeader>
+    const displayDate = `${formattedDate} • ${formattedTime}`;
 
-      <CardContent>
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">
-          {message.content}
-        </p>
-      </CardContent>
-    </Card>
-  );
+
+    return (
+        <Card className="shadow-sm">
+            <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                <div>
+                    <CardTitle className="text-base font-semibold">
+                        Anonymous Message
+                    </CardTitle>
+                    <CardDescription className="text-xs text-muted-foreground">
+                        {displayDate}
+                    </CardDescription>
+                </div>
+
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button
+                            variant="destructive"
+                            size="icon"
+                            className="h-8 w-8 rounded-full"
+                        >
+                            <X className="w-4 h-4" />
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Delete this message?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. The message will be permanently
+                                removed from your inbox.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteConfirm}>
+                                Delete
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </CardHeader>
+
+            <CardContent>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    {message.content}
+                </p>
+            </CardContent>
+        </Card>
+    );
 }
 
 export default MessageCard;
