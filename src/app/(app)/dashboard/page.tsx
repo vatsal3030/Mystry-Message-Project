@@ -1,3 +1,5 @@
+'use client'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
@@ -8,11 +10,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios, { AxiosError } from 'axios'
 import { Loader2, RefreshCcw } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import MessageCard from '@/components/MessageCard'
-
+// import { Session } from 'next-auth'
 
 function page() {
     const [messages, setMessages] = useState<Message[]>([])
@@ -88,6 +90,14 @@ function page() {
             })
         }
     }
+
+    const user = session?.user as User | undefined;
+
+    // if there is no logged-in user, don't try to read username
+    if (!user) {
+        return <div>Please Login</div>;
+    }
+
 
     const { username } = session?.user as User
     //    to do : 

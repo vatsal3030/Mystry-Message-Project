@@ -1,6 +1,6 @@
 // src/helpers/sendVerificationEmail.tsx
 import React from "react";
-import { resend } from "@/lib/resend";
+import resend from "@/lib/resend";
 import VerificationEmail from "../../emails/VerificationEmail";
 import { ApiResponse } from "../types/ApiResponse";
 import { render } from "@react-email/render";
@@ -17,7 +17,7 @@ export async function sendVerificationEmail(
     );
 
     await resend.emails.send({
-      from: "no-reply@yourdomain.com",
+      from: "onboarding@resend.dev",   // recommended for dev
       to: email,
       subject: "Verify your email address",
       html, // ✅ now this is a string

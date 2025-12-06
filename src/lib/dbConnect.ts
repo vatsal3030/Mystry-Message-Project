@@ -1,8 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 type ConnectionObject = {
     isConnected?: number;
 }
+
+//isConnected hood number like this
+// 0 → disconnected
+// 1 → connected
+// 2 → connecting
+// 3 → disconnecting
 
 const connection: ConnectionObject = {}
 
@@ -15,7 +21,7 @@ async function dbConnect(): Promise<void> {
 
     try {
         const db = await mongoose.connect(process.env.MONGO_URI || '', {});
-        connection.isConnected = db.connections[0].readyState;
+        connection.isConnected = db.connections[0].readyState; // this help to update connection varibale for checking already connected or not ?
         console.log(db.connections);
         console.log("Connected to database");
     }

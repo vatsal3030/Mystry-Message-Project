@@ -2,16 +2,15 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
-import { success } from "zod";
-import { tr } from "zod/locales";
 
+//this is handler function
 export async function POST(request: Request) {
     await dbConnect();
     try {
         const { username, email, password } = await request.json()
         const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
-            isverified: true
+            isVerified: true
         })
 
         if (existingUserVerifiedByUsername) {
@@ -34,14 +33,14 @@ export async function POST(request: Request) {
                 const hashedPassword = await bcrypt.hash(password, 10);
                 existingUserByEmail.password = hashedPassword;
                 existingUserByEmail.verifyCode = verifyCode;
-                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000); // 1 hour expiry
+                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 259200000); // 3 days expiry || 3600000 1 hour expiry
                 await existingUserByEmail.save()
             }
         }
         else {
             const hashedPassword = await bcrypt.hash(password, 10);
             const expiryDate = new Date();
-            expiryDate.setHours(expiryDate.getHours() + 1); // 1 hour expiry 
+            expiryDate.setHours(expiryDate.getHours() + 72); // 72 hour expiry 
 
             const newUser = new UserModel({
                 username,
@@ -49,8 +48,8 @@ export async function POST(request: Request) {
                 password: hashedPassword,
                 verifyCode: verifyCode,
                 verifyCodeExpiry: expiryDate,
-                isverified: false,
-                isAcceptingMessage: true,
+                isVerified: false,
+                isAcceptingMessages: true,
                 messages: []
             })
             await newUser.save();

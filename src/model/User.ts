@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
+// this is like defined each field with it's data type
 export interface Message extends Document {
    content: string;
    createdAt: Date;
@@ -15,6 +15,7 @@ export interface User extends Document {
    isAcceptingMessages: boolean;
    messages: Message[];
 }
+
 
 const MessageSchema: Schema<Message> = new Schema({
    content: {
@@ -67,6 +68,7 @@ const UserSchema: Schema<User> = new Schema({
    messages: [MessageSchema]
 });
 
+// this help when redefining this will not re run this mongoose.model<User>('User', UserSchema); . cause re reuning this cause of error.
 const UserModel  = (mongoose.models.User as mongoose.Model<User>) || mongoose.model<User>('User', UserSchema);
 
 export default UserModel;   

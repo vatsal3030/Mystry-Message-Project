@@ -32,7 +32,7 @@ function page() {
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
       redirect: false,
-      idetifier: data.identifier,
+      email: data.identifier,
       password: data.password
     })
     if (result?.error) {
