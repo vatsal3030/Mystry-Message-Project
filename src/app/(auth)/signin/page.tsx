@@ -30,11 +30,11 @@ function page() {
 
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    const result = await signIn('credentials', {
+    const result = await signIn("credentials", {
       redirect: false,
-      email: data.identifier,
-      password: data.password
-    })
+      identifier: data.identifier, // ✅ same name as in credentials
+      password: data.password,
+    });
     if (result?.error) {
       toast("Login Failed", {
         description: "incorrect username or password"
