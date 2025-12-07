@@ -13,7 +13,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-function Page() {
+function VerifyPage() {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof verifySchema>>({
@@ -75,4 +75,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default VerifyPage;

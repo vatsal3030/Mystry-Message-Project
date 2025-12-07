@@ -16,7 +16,7 @@ import { toast } from 'sonner'
 import MessageCard from '@/components/MessageCard'
 // import { Session } from 'next-auth'
 
-function Page() {
+function DashboardPage() {
     const [messages, setMessages] = useState<Message[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isSwitchLoading, setIsSwitchLoading] = useState(false)
@@ -175,4 +175,4 @@ function Page() {
     )
 }
 
-export default Page
+export default DashboardPage
