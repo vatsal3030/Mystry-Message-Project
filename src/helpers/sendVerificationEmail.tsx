@@ -1,4 +1,4 @@
-// src/helpers/sendVerificationEmail.tsx
+// src/helpers/sendVerificationEmail.ts
 import React from "react";
 import resend from "@/lib/resend";
 import VerificationEmail from "../../emails/VerificationEmail";
@@ -11,16 +11,23 @@ export async function sendVerificationEmail(
   verifyCode: string
 ): Promise<ApiResponse> {
   try {
-    // ⬇️ render returns Promise<string>, so we await it
     const html = await render(
       <VerificationEmail username={username} otp={verifyCode} />
     );
 
+    const toEmail =
+      process.env.NODE_ENV === "development"
+        ? "vatsalvadgama04@gmail.com" // 👈 only your email in dev
+        : email;                       // 👈 real user in production
+
     await resend.emails.send({
-      from: "onboarding@resend.dev",   // recommended for dev
-      to: email,
+      from:
+        process.env.NODE_ENV === "development"
+          ? "onboarding@resend.dev"                // dev safe
+          : "Mystery <no-reply@yourdomain.com>",   // 👈 your verified domain for prod
+      to: toEmail,
       subject: "Verify your email address",
-      html, // ✅ now this is a string
+      html,
     });
 
     return {
